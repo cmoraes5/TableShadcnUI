@@ -4,9 +4,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Dialog, DialogTrigger } from "./components/ui/dialog";
 import { ProductsFilters } from "./components/products-filters";
 import { CreateProductDialog } from "./components/create-product-dialog";
-import { products } from "./data/products";
+import { getProducts, products } from "./data/products";
+import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
 
 export function App() {
+z
+  const { data: products } = useQuery({
+    queryKey: ['products'], // Maneira de identificar a requisição globalmente na aplicação
+    queryFn: getProducts,
+  })
+
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <h1 className="text-3xl font-bold">Produtos</h1>
@@ -34,7 +42,7 @@ export function App() {
             <TableHead>Preço</TableHead>
           </TableHeader>
           <TableBody>
-            {products.map((product) => {
+            {products?.map((product) => {
               return (
                 <TableRow key={product.id}>
                   <TableCell>{product.id}</TableCell>
